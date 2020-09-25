@@ -22,14 +22,6 @@ module.exports.accounts = [
             9 - Отключить
          */
     },
-    {
-        token: '',
-        id: '',
-        status: true,
-        online: true,
-        messages: true,
-        time: 8
-    }
 ];
 // Statuses
 module.exports.statuses = [
@@ -42,6 +34,11 @@ module.exports.statuses = [
             'Авто-статус, гучи флип флап'
         ],
     },
+    {
+        id: '', text: [
+            '',
+        ],
+    }
 ]
 // Messages
 /*
@@ -53,10 +50,10 @@ module.exports.statuses = [
 */
 module.exports.message = [
     {
-        id: '', config : {
-            peer_id: '',
-            type: [],
-            message: ''
+        id: '211845323', config : {
+            peer_id: '2000000008',
+            type: ['interval', 1],
+            message: 'Проверочка'
         },
     },
 ];
