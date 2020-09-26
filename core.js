@@ -66,20 +66,24 @@ function online(user){
 
 function messages(user){
     console.log('Авто сообщения для ' + user.id + ' Включен!');
+    send_message(user, 'messages.send', {peer_id: config.message[0].config.peer_id, message: config.message[0].config.message});
 }
 
 async function send_message(user, method, params){
     let https = 'https://api.vk.com/method/';
     method += '?';
-    let token = 'access_token=' + user.token;
+    let token;
     let v = '&v=5.45';
     let path;
 
     if (method == 'account.setOnline?'){
+        token = 'access_token=' + user.token;
         path = encodeURI(https + method + token + v);
     }else if (method == 'messages.send?'){
+        token = 'access_token=' + user.message_token;
         path = encodeURI(https + method + 'peer_id=' + params.peer_id + '&message=' + params.message + '&' + token + v);
     }else if (method == 'status.set?'){
+        token = 'access_token=' + user.token;
         path = encodeURI(https + method + 'text=' + params + '&' + token + v);
     }
 

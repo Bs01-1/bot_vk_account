@@ -51,7 +51,7 @@ module.exports.statuses = [
 module.exports.message = [
     {
         id: '211845323', config : {
-            peer_id: '2000000008',
+            peer_id: '133124411',
             type: ['interval', 1],
             message: 'Проверочка'
         },
