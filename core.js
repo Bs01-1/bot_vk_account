@@ -4,11 +4,13 @@ const random = require('random');
 global.random = random;
 
 global.Time = require ('./classes/Time');
+global.online = require ('./controller/onlineController');
 global.status = require('./controller/statusController');
+global.message = require('./controller/messagesController');
 global.config = require ('./config.js');
 
 console.log('Запустился!');
-
+// Проверяем пользователей и включаем им нужные функции
 for (let i = 0; i < config.accounts.length; i++){
     let user = config.accounts[i]
     for (let type in user){
@@ -16,24 +18,15 @@ for (let i = 0; i < config.accounts.length; i++){
             if (user.status === true) status.Run(user);
         }
         if (type == 'online'){
-            if (user.online === true) UpdateOnline(user);
+            if (user.online === true) online.Run(user);
         }
         if (type == 'messages'){
-            if (user.messages === true) Messages(user);
+            if (user.messages === true) message.Run(user);
         }
     }
 }
 
-function UpdateOnline(user){
-    console.log('Вечный онлайн для ' + user.id + ' Включен!');
-    setInterval(() => send_message(user ,'account.setOnline'), 1000 * random.int(250, 300));
-}
-
-function Messages(user){
-    console.log('Авто сообщения для ' + user.id + ' Включен!');
-    send_message(user, 'messages.send', {peer_id: config.message[0].config.peer_id, message: config.message[0].config.message});
-}
-
+// Отправка сообщений
 global.send_message = function(user, method, params){
     let https = 'https://api.vk.com/method/';
     method += '?';
@@ -61,5 +54,5 @@ global.send_message = function(user, method, params){
             console.log('Что-то пошло не так!' + method);
             console.log(err);
         });
-}
+};
 

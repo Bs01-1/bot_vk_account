@@ -1,10 +1,9 @@
 exports.Run = function (user) {
     console.log('Автостатус для ' + user.id + ' Включен!');
-    UpdateStatus(user);
-    // setInterval(() => send_message(user, 'status.set', UpdateStatus(user)), 1000 * random.int(66, 80));
+    setInterval(() => send_message(user, 'status.set', updateStatus(user)), 1000 * random.int(66, 80));
 }
 
-function UpdateStatus(user) {
+function updateStatus(user) {
     // Поиск рандомного статуса
     let statuses = [];
 
@@ -19,7 +18,6 @@ function UpdateStatus(user) {
         statuses.push(config.statuses[0].text[i]);
     }
     let random_status = statuses[random.int(0, statuses.length - 1)];
-    statuses = [];
 
     // Делаем красивую дату/время
     let time = Time.get();
@@ -41,7 +39,11 @@ function UpdateStatus(user) {
     let online = user.online ? 'T' : 'F';
     let auto_message = user.messages ? 'T' : 'F';
 
-    let status  = status_date + random_status + ' || ' + auto_status + online + auto_message;
+    let the_information_in_the_status;
+    if (config.settings.the_information_in_the_status === false) the_information_in_the_status = '';
+    else the_information_in_the_status = ' || ' + auto_status + online + auto_message;
+
+    let status  = status_date + random_status + the_information_in_the_status;
 
     return status;
 }
