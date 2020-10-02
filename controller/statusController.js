@@ -12,13 +12,12 @@ function updateStatus(user) {
             for (let j = 0; j < config.statuses[i].text.length; j++){
                 statuses.push(config.statuses[i].text[j])
             }
-        }
+        } else console.log('Статусы для ' + user.id + ' не найдены! Будут использоваться только страндартные статусы.')
     }
-    for (let i = 0; i < config.statuses[0].text.length; i++){
-        statuses.push(config.statuses[0].text[i]);
+    for (let i = 0; i < Default.status.length; i++){
+        statuses.push(Default.status[i]);
     }
     let random_status = statuses[random.int(0, statuses.length - 1)];
-
     // Делаем красивую дату/время
     let time = Time.get();
 

@@ -4,6 +4,7 @@ const random = require('random');
 global.random = random;
 
 global.Time = require ('./classes/Time');
+global.Default = require ('./dictionaries/default');
 global.online = require ('./controller/onlineController');
 global.status = require('./controller/statusController');
 global.message = require('./controller/messagesController');

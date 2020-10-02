@@ -8,7 +8,7 @@ module.exports.accounts = [
         id: '',
         status: true,
         online: true,
-        messages: false,
+        messages: true,
         time: 6
         /*
             1 - 0H 00M
@@ -26,15 +26,6 @@ module.exports.accounts = [
 // Statuses
 module.exports.statuses = [
     {
-        id: '0', text: [
-            'Welcome to my profile',
-            'У меня тут статус каждую минуту меняется...',
-            'Авто статус - On',
-            'vk.com/biba_bot',
-            'Авто-статус, гучи флип флап'
-        ],
-    },
-    {
         id: '', text: [
             '',
         ],
@@ -44,17 +35,38 @@ module.exports.statuses = [
 /*
     id: id, config: {
         peer_id: user or conversation,
-        type: ['interval' - sending messages by interval, num - time interval in minutes],
+        type: ['interval' - sending messages by interval, num or array - time interval in minutes],
+        type: ['At_this_hour' - Отправка сообщений в определенный час, num - в какой час
         message: string or array
     }
 */
 module.exports.message = [
     {
         id: '211845323', config : {
-            peer_id: '133124411',
-            type: ['interval', 1],
-            message: 'Проверочка'
+            peer_id: '2000000008',
+            type: ['Interval', [300, 500]],
         },
     },
+    {
+        id: '211845323', config: {
+            peer_id: '2000000008',
+            type: ['Send_at_this_hour', 0],
+            message: 'Наступила ночь, а это значит ночные правила!'
+        }
+    },
+    {
+        id: '211845323', config: {
+            peer_id: '2000000008',
+            type: ['Send_at_this_hour', 6],
+            message: 'С добрым утром, ночные правила больше не действуют!'
+        }
+    },
+    {
+        id: '133124411', config: {
+            peer_id: '-194038078',
+            type: ['Interval', 2],
+            message: 'бибон'
+        }
+    }
 ];
 
