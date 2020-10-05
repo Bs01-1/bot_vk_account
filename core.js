@@ -6,6 +6,7 @@ global.Time = require ('./models/Time');
 global.online = require ('./controller/onlineController');
 global.status = require('./controller/statusController');
 global.message = require('./controller/messagesController');
+global.auto_biba = require ('./controller/bibaController');
 global.config = require ('./config.js');
 
 console.log('Запустился!');
@@ -19,10 +20,28 @@ for (let i = 0; i < config.accounts.length; i++){
         if (type == 'online'){
             if (user.online === true) online.Run(user);
         }
-        // if (type == 'messages'){
-        //     if (user.messages === true) message.Run(user);
-        // }
+        if (type == 'messages'){
+            if (user.messages === true) message.Run(user);
+        }
+        if (type == 'auto_biba'){
+            if (user.auto_biba === true) auto_biba.Run(user);
+        }
     }
+}
+
+global.pre_send = (message_config, user) => {
+    let message;
+    if (message_config.key === undefined){
+        message = (typeof message_config.message == 'string') ? message_config.message : message_config.message
+            [random.int(0, message_config.message.length - 1)];
+    } else {
+        message = render('auto-messages', {
+            key: message_config.key
+        })
+    }
+    send_message(user, 'messages.send', {
+        peer_id: message_config.peer_id, message: message
+    })
 }
 
 // Отправка сообщений
