@@ -22,51 +22,18 @@ module.exports.accounts = [
             9 - Отключить
          */
     },
-];
-// Statuses
-module.exports.statuses = [
     {
-        id: '', text: [
-            '',
-        ],
-    }
-]
-// Messages
-/*
-    id: id, config: {
-        peer_id: user or conversation,
-        type: ['interval' - sending messages by interval, num or array - time interval in minutes],
-        type: ['At_this_hour' - Отправка сообщений в определенный час, num - в какой час
-        message: string or array
-    }
-*/
-module.exports.message = [
-    {
-        id: '211845323', config : {
-            peer_id: '2000000008',
-            type: ['Interval', [300, 500]],
-        },
+        token: '',
+        message_token: '',
+        id: '211845323',
+        status: true,
+        online: true,
+        messages: false,
+        time: 8
     },
     {
-        id: '211845323', config: {
-            peer_id: '2000000008',
-            type: ['Send_at_this_hour', 0],
-            message: 'Наступила ночь, а это значит ночные правила!'
-        }
-    },
-    {
-        id: '211845323', config: {
-            peer_id: '2000000008',
-            type: ['Send_at_this_hour', 6],
-            message: 'С добрым утром, ночные правила больше не действуют!'
-        }
-    },
-    {
-        id: '133124411', config: {
-            peer_id: '-194038078',
-            type: ['Interval', 2],
-            message: 'бибон'
-        }
+        message_token: '',
+        id: '215567165',
+        messages: false,
     }
 ];
-
