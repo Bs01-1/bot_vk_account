@@ -10,6 +10,7 @@ module.exports.accounts = [
         online: true,
         messages: true,
         time: 6
+
         /*
             1 - 0H 00M
             2 - Время - 0:00
