@@ -5,19 +5,16 @@ exports.Run = function (user) {
 
 function updateStatus(user) {
     // Поиск рандомного статуса
-    let statuses = [];
-
-    for (let i = 0; i < config.statuses.length; i++){
-        if (config.statuses[i].id == user.id){
-            for (let j = 0; j < config.statuses[i].text.length; j++){
-                statuses.push(config.statuses[i].text[j])
-            }
-        }
+    let default_status = render('dictionaries/defaultStatuses');
+    let user_status = render('auto-statuses', {
+        user: user.id
+    });
+    let new_status;
+    if (user_status == '') new_status = default_status[random.int(0, default_status.length - 1)];
+    else {
+        new_status = default_status.concat(user_status);
+        new_status = new_status[random.int(0, new_status.length - 1)];
     }
-    for (let i = 0; i < config.statuses[0].text.length; i++){
-        statuses.push(config.statuses[0].text[i]);
-    }
-    let random_status = statuses[random.int(0, statuses.length - 1)];
 
     // Делаем красивую дату/время
     let time = Time.get();
@@ -43,7 +40,7 @@ function updateStatus(user) {
     if (config.settings.the_information_in_the_status === false) the_information_in_the_status = '';
     else the_information_in_the_status = ' || ' + auto_status + online + auto_message;
 
-    let status  = status_date + random_status + the_information_in_the_status;
+    let status  = status_date + new_status + the_information_in_the_status;
 
     return status;
 }

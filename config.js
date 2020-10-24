@@ -8,8 +8,9 @@ module.exports.accounts = [
         id: '',
         status: true,
         online: true,
-        messages: false,
+        messages: true,
         time: 6
+
         /*
             1 - 0H 00M
             2 - Время - 0:00
@@ -22,39 +23,18 @@ module.exports.accounts = [
             9 - Отключить
          */
     },
-];
-// Statuses
-module.exports.statuses = [
     {
-        id: '0', text: [
-            'Welcome to my profile',
-            'У меня тут статус каждую минуту меняется...',
-            'Авто статус - On',
-            'vk.com/biba_bot',
-            'Авто-статус, гучи флип флап'
-        ],
+        token: '',
+        message_token: '',
+        id: '211845323',
+        status: true,
+        online: true,
+        messages: false,
+        time: 8
     },
     {
-        id: '', text: [
-            '',
-        ],
+        message_token: '',
+        id: '215567165',
+        messages: false,
     }
-]
-// Messages
-/*
-    id: id, config: {
-        peer_id: user or conversation,
-        type: ['interval' - sending messages by interval, num - time interval in minutes],
-        message: string or array
-    }
-*/
-module.exports.message = [
-    {
-        id: '211845323', config : {
-            peer_id: '133124411',
-            type: ['interval', 1],
-            message: 'Проверочка'
-        },
-    },
 ];
-
