@@ -1,7 +1,9 @@
 exports.Run = function (user) {
+    console.log('Авто-биба для ' + user.id + ' включена!');
     let count = 1;
     let run = function () {
         setTimeout(function () {
+            let message_config = { peer_id : '-194038078' };
             if (count >= 27) {
                 setTimeout(function () {
                     count = 1;
