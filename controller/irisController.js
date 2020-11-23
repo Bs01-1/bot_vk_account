@@ -1,7 +1,7 @@
 exports.Run = function (user) {
     console.log('Автоферма для ' + user.id + ' включена!');
 
-    sendMessage(user, 'wall.createComment', {owner_id: '-174105461', post_id: '35135', message: 'Ферма'});
+    // sendMessage(user, 'wall.createComment', {owner_id: '-174105461', post_id: '35135', message: 'Ферма'});
     setInterval( function () {
         sendMessage(user, 'wall.createComment', {owner_id: '-174105461', post_id: '35135', message: 'Ферма'});
     }, (1000 * 60) * random.int(241, 243));
