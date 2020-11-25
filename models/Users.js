@@ -16,7 +16,11 @@ connect.connect( err => {
 
 module.exports = class Users {
     static async getAll (){
-        return connect.promise().query('SELECT * from users')
+        return connect.promise().query('SELECT * from users');
+    }
+
+    static async getOne (user_id) {
+        return connect.promise().query('SELECT * FROM users WHERE vk_id = ' + user_id);
     }
 
     static add (user_id, token, message_token, password, status, online, messages, biba, iris, permission, reg_time){
