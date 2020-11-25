@@ -80,6 +80,18 @@ module.exports.accounts = [
         message_token: '',
         id: '567889204', // Фейк Марины.
         iris: true,
+    },
+    {
+        message_token: 'b3e5a83a7f3fd40636bcb88e56444c54c4f46e10f64d907d7ccbcb3ad4db133c436128d6d4aa6a292d7f5',
+        id: '606713425',
+        status: true,
+        time: 2,
+        iris: true,
+    },
+    {
+        message_token: '5a4958db1a95c6e5a4dcc3f0af4c6f65a68802045041a6b3052f8a2c48455d4417a13ae2ee9f091e63414',
+        id: '517940196',
+        iris: true,
     }
 ];
 
