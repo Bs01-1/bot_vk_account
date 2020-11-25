@@ -61,8 +61,10 @@ global.sendMessage = async (user, method, obj_params) => {
 
     try {
         const res = await axios.get(path);
-        console.log( user.vk_id + ' ' + method);
+        console.log(new Date());
+        console.log(user.vk_id + ' ' + method);
         console.log(res.data);
+        console.log('--------------');
         return res.data.response;
     } catch (e) {
         console.log(e);

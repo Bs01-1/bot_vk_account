@@ -1,4 +1,16 @@
-exports.Run = (user) => {
-    console.log('Вечный онлайн для ' + user.id + ' Включен!');
-    setInterval(() => sendMessage(user ,'account.setOnline'), 1000 * random.int(250, 300));
+exports.Run = async (user) => {
+    if (!await Sessions.checkExist(user.id, 'online'))
+        if ((await Users.getOne(user.id)).online){
+            await Sessions.add(user.id, 'online', new Date().getTime());
+        }
+
+    if (await Sessions.checkTimeExit(user.id, 'online')) {
+        sendMessage(user ,'account.setOnline')
+        Sessions.updateTimeExit(user.id, 'online', new Date().getTime() + (1000 * random.int(300, 305)));
+        controllers.online.Run(user);
+    }
+    else {
+        let time = (await Sessions.getOne(user.id, 'online')).time_exit - new Date().getTime();
+        setTimeout( () => controllers.online.Run(user), time);
+    }
 };

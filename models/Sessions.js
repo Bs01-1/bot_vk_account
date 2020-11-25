@@ -15,8 +15,8 @@ module.exports = class Sessions {
         return (time <= 0) ? true : false;
     }
 
-    static async updateTimeExit (user_id, time_exit) {
-        await connect.promise().query(`UPDATE sessions SET time_exit = ${time_exit} WHERE user_id = ${user_id}`);
+    static async updateTimeExit (user_id, type, time_exit) {
+        await connect.promise().query(`UPDATE sessions SET time_exit = ${time_exit} WHERE user_id = ${user_id} AND type = '${type}'`);
     }
 
     static async getOne (user_id, type) {

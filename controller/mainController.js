@@ -15,6 +15,10 @@ async function Run(users) {
              console.log('Автостатус для ' + user.vk_id + ' Включен!');
              await controllers.status.Run(user);
          }
+         if (users[i].online) {
+             console.log('Вечный онлайн для ' + user.vk_id + ' Включен!');
+            await controllers.online.Run(user);
+         }
     }
 
 }
