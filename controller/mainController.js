@@ -17,7 +17,11 @@ async function Run(users) {
          }
          if (users[i].online) {
              console.log('Вечный онлайн для ' + user.vk_id + ' Включен!');
-            await controllers.online.Run(user);
+             await controllers.online.Run(user);
+         }
+         if (users[i].iris) {
+             console.log('Автоферма для ' + user.vk_id + ' включена!');
+             await controllers.iris.Run(user);
          }
     }
 

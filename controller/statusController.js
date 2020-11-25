@@ -47,7 +47,7 @@ async function updateStatus(user) {
         let auto_biba = user.biba ? 'T' : 'F';
         the_information_in_the_status = auto_status + online + auto_message + auto_biba;
     }
-    console.log(status_info.the_information_in_the_status)
+
     if (new_status === undefined) {
         new_status = '';
     }
