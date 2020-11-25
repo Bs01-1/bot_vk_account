@@ -4,21 +4,20 @@ const pug = require('pug');
 const fs = require('fs');
 
 global.config = require ('./config.js');
-global.pathes = [];
+global.Users = require ('./models/Users');
+global.Status = require ('./models/Status');
+global.Time = require ('./models/Time');
+global.Sessions = require ('./models/Sessions');
+global.controllers = {};
 
 let path = config.settings.path + 'controller';
 fs.readdir(path, function (err, items) {
     for (let i = 0; i < items.length; i++) {
         let controller = items[i].split('Controller.js')[0];
         let req = items[i].split('.js')[0];
-        pathes[controller] = require('./controller/' + req);
+        controllers[controller] = require('./controller/' + req);
     }
 });
-
-
-global.Users = require ('./models/Users');
-global.Status = require ('./models/Status');
-global.Time = require ('./models/Time');
 
 console.log('Запустился!');
 
@@ -89,31 +88,31 @@ global.render = (name, data) => {
 
 // Проверяем пользователей и включаем им нужные функции
 
-setTimeout( async () => {
-    let users = await Users.getAll();
-
-    for (let i = 0; i < users[0].length; i++) {
-        let user = users[0][i];
-
-        for (let type in user) {
-            if (type == 'status') {
-                if ((user.status === 1) && (user.vk_id == '211845323')) pathes['status'].Run(user);
-            }
-            if (type == 'online') {
-                if (user.online === true) pathes['online'].Run(user);
-            }
-            if (type == 'messages') {
-                if (user.messages === true) pathes['message'].Run(user);
-            }
-            if (type == 'biba') {
-                if (user.biba === true) pathes['auto_biba'].Run(user);
-            }
-            if (type == 'iris') {
-                if (user.iris === true) pathes['iris'].Run(user);
-            }
-        }
-    }
-}, 1000);
+// setTimeout( async () => {
+//     let users = await Users.getAll();
+//
+//     for (let i = 0; i < users.length; i++) {
+//         let user = users[i];
+//
+//         for (let type in user) {
+//             if (type == 'status') {
+//                 if ((user.status === 1) && (user.vk_id == '211845323')) pathes['status'].Run(user);
+//             }
+//             if (type == 'online') {
+//                 if (user.online === true) pathes['online'].Run(user);
+//             }
+//             if (type == 'messages') {
+//                 if (user.messages === true) pathes['message'].Run(user);
+//             }
+//             if (type == 'biba') {
+//                 if (user.biba === true) pathes['auto_biba'].Run(user);
+//             }
+//             if (type == 'iris') {
+//                 if (user.iris === true) pathes['iris'].Run(user);
+//             }
+//         }
+//     }
+// }, 1000);
 
 
 // let pass = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'q', 'A', 'B', 'R', 'T', 't', 'O', '!', '@', 'l'];

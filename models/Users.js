@@ -16,11 +16,13 @@ connect.connect( err => {
 
 module.exports = class Users {
     static async getAll (){
-        return connect.promise().query('SELECT * from users');
+        let result = await connect.promise().query('SELECT * from users');
+        return result[0];
     }
 
     static async getOne (user_id) {
-        return connect.promise().query('SELECT * FROM users WHERE vk_id = ' + user_id);
+        let result = await connect.promise().query('SELECT * FROM users WHERE id = ' + user_id);
+        return result[0][0];
     }
 
     static add (user_id, token, message_token, password, status, online, messages, biba, iris, permission, reg_time){

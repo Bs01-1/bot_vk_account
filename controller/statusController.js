@@ -1,7 +1,18 @@
-exports.Run = function (user) {
-    console.log('Автостатус для ' + user.vk_id + ' Включен!');
-    // setInterval(() => sendMessage(user, 'status.set', updateStatus(user)), 1000 * random.int(66, 80));
-    updateStatus(user);
+exports.Run = async function (user) {
+    if (!await Sessions.checkExist(user.id, 'auto-status'))
+        if ((await Users.getOne(user.id)).status){
+            await Sessions.add(user.id, 'auto-status', new Date().getTime() + (1000 * random.int(60, 70)));
+        }
+
+    if (await Sessions.checkTimeExit(user.id, 'auto-status')) {
+        sendMessage(user, 'status.set', await updateStatus(user));
+        Sessions.updateTimeExit(user.id, new Date().getTime() + (1000 * random.int(60, 70)));
+        controllers.status.Run(user);
+    }
+    else {
+        let time = (await Sessions.getOne(user.id, 'auto-status')).time_exit - new Date().getTime();
+        setTimeout( () => controllers.status.Run(user), time);
+    }
 };
 
 async function updateStatus(user) {
@@ -54,7 +65,6 @@ async function updateStatus(user) {
     }
 
     let status  = status_date + new_status + the_information_in_the_status;
-    console.log(status)
 
     return {text: status};
 }
