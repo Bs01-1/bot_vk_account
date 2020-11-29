@@ -6,7 +6,7 @@ exports.Run = async (user) => {
 
     if (await Sessions.checkTimeExit(user.id, 'online')) {
         sendMessage(user ,'account.setOnline')
-        Sessions.updateTimeExit(user.id, 'online', new Date().getTime() + (1000 * random.int(300, 305)));
+        Sessions.updateSession(user.id, 'online', new Date().getTime() + (1000 * random.int(300, 305)));
         controllers.online.Run(user);
     }
     else {

@@ -6,7 +6,7 @@ exports.Run = async function (user) {
 
     if (await Sessions.checkTimeExit(user.id, 'auto-status')) {
         sendMessage(user, 'status.set', await updateStatus(user));
-        Sessions.updateTimeExit(user.id, 'auto-status',new Date().getTime() + (1000 * random.int(60, 70)));
+        Sessions.updateSession(user.id, 'auto-status',new Date().getTime() + (1000 * random.int(60, 70)));
         controllers.status.Run(user);
     }
     else {

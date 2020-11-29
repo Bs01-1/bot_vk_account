@@ -8,7 +8,7 @@ exports.Run = async function (user) {
             return time + 1000 * 60 * 60 * random.int(0, 24) * random.int(5, 6)
         }
     ];
-    let dont_leave = ['133124411', '620995064', '606713425'];
+    let dont_leave = ['133124411', '620995064', '606713425', '447053323'];
 
     autoFarmCoins(user, session[0], session_time_arr[0]);
     autoSendCoinsInconversation(user, session[1], session_time_arr[1], dont_leave);
@@ -18,21 +18,21 @@ exports.Run = async function (user) {
 async function autoFarmCoins(user, session, session_arr){
     let session_time = await session_arr(new Date().getTime());
 
-    let result = await Sessions.checkSessionRunAndUpdate(user, 'status', session, session_time);
+    let result = await Sessions.checkSessionRunAndUpdate(user, 'iris', session, session_time);
     if(result === true) {
         sendMessage(user, 'wall.createComment', {owner_id: '-174105461', post_id: '35135', message: 'Ферма'});
         await autoFarmCoins(user, session, session_arr);
     }
     else
-        setTimeout( () => autoFarmCoins(user, session, session_arr), result);
+        setTimeout( () => autoFarmCoins(user, session, session_arr), result.time);
 }
 
 async function autoSendCoinsInconversation(user, session, session_arr, dont_leave) {
     let session_time = await session_arr(new Date().getTime());
 
-    let result = await Sessions.checkSessionRunAndUpdate(user, 'status', session, session_time);
-    if(typeof result == 'number') {
-        setTimeout( () => autoFarmCoins(user, session, session_arr), result);
+    let result = await Sessions.checkSessionRunAndUpdate(user, 'iris', session, session_time);
+    if(typeof result == 'object') {
+        setTimeout( () => autoFarmCoins(user, session, session_arr), result.time);
         return;
     }
     else if (result === true)

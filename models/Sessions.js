@@ -15,8 +15,13 @@ module.exports = class Sessions {
         return (time <= 0) ? true : false;
     }
 
-    static async updateTimeExit (user_id, type, time_exit) {
-        await connect.promise().query(`UPDATE sessions SET time_exit = ${time_exit} WHERE user_id = ${user_id} AND type = '${type}'`);
+    static async updateSession (user_id, type, time_exit, count) {
+        let request = `UPDATE sessions SET time_exit = ${time_exit}`;
+        if (count)
+            request += `, count = ${count}`;
+        request += ` WHERE user_id = ${user_id} AND type = '${type}'`;
+
+        await connect.promise().query(request);
     }
 
     static async getOne (user_id, type) {
@@ -30,12 +35,12 @@ module.exports = class Sessions {
             }
 
         if (await this.checkTimeExit(user.id, session_name)) {
-            this.updateTimeExit(user.id, session_name, session_time);
+            this.updateSession(user.id, session_name, session_time);
             return true;
         }
         else {
-            let time = (await Sessions.getOne(user.id, session_name)).time_exit - new Date().getTime();
-             return time;
+            let result = (await Sessions.getOne(user.id, session_name))
+             return {time: result.time_exit - new Date().getTime(), count: result.count};
         }
     }
 };
