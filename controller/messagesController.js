@@ -4,11 +4,11 @@ exports.Run = function (user) {
         if (config.message[i].id == user.id) {
             let message_config = config.message[i].config;
             if (message_config.type == 'interval') {
-                console.log('Интервал сообщений для ' + user.id + ' Включен!');
+                console.log('Интервал сообщений для ' + user.vk_id + ' Включен!');
                 intervalMessage(message_config, user);
             }
             if (message_config.type == 'send_at_this_hour') {
-                console.log('Фиксированное сообщение для ' + user.id + ' Включен!');
+                console.log('Фиксированное сообщение для ' + user.vk_id + ' Включен!');
                 sendAtThisHourMessage(message_config, user);
             }
         }

@@ -1,15 +1,23 @@
 const axios = require('axios');
 global.random = require('random');
 const pug = require('pug');
+const fs = require('fs');
 
 global.config = require ('./config.js');
-global.Db = require ('./models/Db');
+global.Users = require ('./models/Users');
+global.Status = require ('./models/Status');
 global.Time = require ('./models/Time');
-global.online = require ('./controller/onlineController');
-global.status = require('./controller/statusController');
-global.message = require('./controller/messagesController');
-global.auto_biba = require ('./controller/bibaController');
-global.iris = require ('./controller/irisController');
+global.Sessions = require ('./models/Sessions');
+global.controllers = {};
+
+let path = config.settings.path + 'controller';
+fs.readdir(path, function (err, items) {
+    for (let i = 0; i < items.length; i++) {
+        let controller = items[i].split('Controller.js')[0];
+        let req = items[i].split('.js')[0];
+        controllers[controller] = require('./controller/' + req);
+    }
+});
 
 console.log('Запустился!');
 
@@ -30,7 +38,7 @@ global.pre_send = (message_config, user) => {
 }
 
 // Отправка сообщение Вк
-global.sendMessage = async (user, method, obj_params, result) => {
+global.sendMessage = async (user, method, obj_params) => {
     let https = 'https://api.vk.com/method/';
     method += '?';
     let token = 'access_token=';
@@ -53,8 +61,10 @@ global.sendMessage = async (user, method, obj_params, result) => {
 
     try {
         const res = await axios.get(path);
-        console.log( user.id + ' ' + method)
+        console.log(new Date());
+        console.log(user.vk_id + ' ' + method);
         console.log(res.data);
+        console.log('--------------');
         return res.data.response;
     } catch (e) {
         console.log(e);
@@ -79,24 +89,45 @@ global.render = (name, data) => {
 
 
 // Проверяем пользователей и включаем им нужные функции
-for (let i = 0; i < config.accounts.length; i++) {
-    let user = config.accounts[i];
-    for (let type in user) {
-        if (type == 'status') {
-            if (user.status === true) status.Run(user);
-        }
-        if (type == 'online') {
-            if (user.online === true) online.Run(user);
-        }
-        if (type == 'messages') {
-            if (user.messages === true) message.Run(user);
-        }
-        if (type == 'biba') {
-            if (user.biba === true) auto_biba.Run(user);
-        }
-        if (type == 'iris') {
-            if (user.iris === true) iris.Run(user);
-        }
-    }
-}
-iris.timeCheck()
+
+// setTimeout( async () => {
+//     let users = await Users.getAll();
+//
+//     for (let i = 0; i < users.length; i++) {
+//         let user = users[i];
+//
+//         for (let type in user) {
+//             if (type == 'status') {
+//                 if ((user.status === 1) && (user.vk_id == '211845323')) pathes['status'].Run(user);
+//             }
+//             if (type == 'online') {
+//                 if (user.online === true) pathes['online'].Run(user);
+//             }
+//             if (type == 'messages') {
+//                 if (user.messages === true) pathes['message'].Run(user);
+//             }
+//             if (type == 'biba') {
+//                 if (user.biba === true) pathes['auto_biba'].Run(user);
+//             }
+//             if (type == 'iris') {
+//                 if (user.iris === true) pathes['iris'].Run(user);
+//             }
+//         }
+//     }
+// }, 1000);
+
+
+// let pass = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'q', 'A', 'B', 'R', 'T', 't', 'O', '!', '@', 'l'];
+// let password = '';
+// for (let j = 0; j < config.accounts.length; j++){
+//     let user = config.accounts[j];
+//     for (let i = 0; i < 10; i++){
+//         password += pass[random.int(0, pass.length-1)]
+//     }
+//     let reg = new Date().getTime();
+//
+//     Db.add_user(user.id, user.token, user.message_token, password, user.status, user.online, user.messages, user.biba, user.iris, 'user', reg);
+//     password = '';
+// }
+
+// iris.timeCheck()

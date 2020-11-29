@@ -1,42 +1,54 @@
-exports.Run = function (user) {
-    console.log('Автоферма для ' + user.id + ' включена!');
+exports.Run = async function (user) {
+    let session = ['iris-farm', 'iris-conversation'];
+    let session_time_arr = [
+        (time) => {
+            return time + 1000 * 60 * (random.int(240, 242));
+        },
+        (time) => {
+            return time + 1000 * 60 * 60 * random.int(0, 24) * random.int(5, 6)
+        }
+    ];
+    let dont_leave = ['133124411', '620995064', '606713425', '447053323'];
 
-    sendMessage(user, 'wall.createComment', {owner_id: '-174105461', post_id: '35135', message: 'Ферма'});
-    setInterval( function () {
+    autoFarmCoins(user, session[0], session_time_arr[0]);
+    autoSendCoinsInconversation(user, session[1], session_time_arr[1], dont_leave);
+
+};
+
+async function autoFarmCoins(user, session, session_arr){
+    let session_time = await session_arr(new Date().getTime());
+
+    let result = await Sessions.checkSessionRunAndUpdate(user, 'iris', session, session_time);
+    if(result === true) {
         sendMessage(user, 'wall.createComment', {owner_id: '-174105461', post_id: '35135', message: 'Ферма'});
-    }, (1000 * 60) * random.int(241, 243));
-};
+        await autoFarmCoins(user, session, session_arr);
+    }
+    else
+        setTimeout( () => autoFarmCoins(user, session, session_arr), result.time);
+}
 
-exports.timeCheck = async function () {
-    let iris_time = await Db.get('session');
-    let time = new Date().getTime();
+async function autoSendCoinsInconversation(user, session, session_arr, dont_leave) {
+    let session_time = await session_arr(new Date().getTime());
 
-    setTimeout(function () {
-        if (iris_time.count < time){
-            for (let i = 0; i < config.accounts.length; i++){
-                if (config.accounts[i].iris === true) {
-                    let user = config.accounts[i];
+    let result = await Sessions.checkSessionRunAndUpdate(user, 'iris', session, session_time);
+    if(typeof result == 'object') {
+        setTimeout( () => autoFarmCoins(user, session, session_arr), result.time);
+        return;
+    }
+    else if (result === true)
+        await autoSendCoinsInconversation(user, session, session_arr);
 
-                    autoSendCoins(user);
-
-                    Db.update_time('session', (new Date().getTime()) + 1000 * 60 * 60 * 24 * 7, 4)
-                }
-            }
-        }else iris.timeCheck();
-    }, 1000)
-};
-
-async function autoSendCoins(user) {
     // Пишем ирису и узнаем сколько у нас коинов
     await sendMessage(user, 'messages.send', {peer_id: '-174105461', message: 'кто я'});
 
     let iris_msg;
     setTimeout(async function () {
         iris_msg = await sendMessage(user, 'messages.getHistory', {user_id: '-174105461', count: 1})
-        console.log(iris_msg)
+
         let msg_split = iris_msg.items[0].body;
         msg_split = msg_split.split('☢️ ')[1];
         msg_split = msg_split.split(' i¢')[0];
+        msg_split = msg_split.replace(' ', '');
 
         // Заходим в беседу, узнаем id беседы
         await sendMessage(user, 'messages.joinChatByInviteLink', {link: config.settings.iris_conversation_link});
@@ -52,9 +64,14 @@ async function autoSendCoins(user) {
         // Пишем сообщение в беседе и выходим из нее
         await sendMessage(user, 'messages.send', {peer_id: chat_id, message: 'б-коин ' + msg_split});
         chat_id = chat_id - 2000000000;
-        if (user.id !== '133124411')
-            if (user.id !== '620995064')
-                 await sendMessage(user, 'messages.removeChatUser', {chat_id: chat_id, user_id: user.id})
+
+        let bool = true;
+        for (let i = 0; i < dont_leave.length; i++)
+            if (user.vk_id == dont_leave[i])
+                bool = false;
+
+        if (bool)
+            await sendMessage(user, 'messages.removeChatUser', {chat_id: chat_id, user_id: user.vk_id})
 
     }, 10000);
 }
