@@ -8,7 +8,7 @@ exports.Run = function (user) {
             return time + 1000 * 60 * random.int(61, 63);
         }
     ];
-    let configs = {peer_id : '-194038078',};
+    let configs = {peer_id: '-194038078'};
 
     autoBibon(user, session[0], session_time_arr[0], configs);
     autoBignonAndFap(user, session[1], session_time_arr[1], configs);
@@ -22,17 +22,17 @@ async function autoBibon(user, session, session_arr, configs) {
         setTimeout( () => autoBibon(user, session, session_arr, configs), result.time);
         return;
     }
-    else if (result === true)
+    else if (result === true) {
+        let session_count = (await Sessions.getOne(user.id, session)).count += 1;
+
+        if (session_count >= 27) {
+            await Sessions.updateSession(user.id, session, new Date().getTime() + 1000 * 60 * 100, 1);
+            console.log("Ждем")
+        } else
+            await Sessions.updateSession(user.id, session, session_time, session_count);
+
         await autoBibon(user, session, session_arr, configs);
-
-    let session_count = (await Sessions.getOne(user.id, session)).count += 1;
-
-    if (session_count >= 27) {
-        await Sessions.updateSession(user.id, session, new Date().getTime() + 1000 * 60 * 100, 0);
-        await autoBibon(user, session, session_arr);
-        return;
-    } else
-        await Sessions.updateSession(user.id, session, session_time, session_count);
+    }
 
     configs.message = 'бибон';
     pre_send(configs, user);
