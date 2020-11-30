@@ -3,8 +3,11 @@ Run(Users.getAll());
 async function Run(users) {
     users = await users;
 
+    // Убрать
+    users = [users[1]];
+
     for (let i = 0; i < users.length; i++){
-        let user = users[i];
+        let user = users[0];
 
         // let user = users[i];
         user.controller = 'status';
