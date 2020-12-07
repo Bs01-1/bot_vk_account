@@ -20,8 +20,13 @@ module.exports = class Users {
         return result[0];
     }
 
-    static async getOne (user_id) {
-        let result = await connect.promise().query('SELECT * FROM users WHERE id = ' + user_id);
+    static async getOne (param) {
+        if (typeof param == 'string')
+            param = `permission = + '${param}'`;
+        else if (typeof param == 'number')
+            param = `id = + ${param}`;
+
+        let result = await connect.promise().query(`SELECT * FROM users WHERE  ${param}`);
         return result[0][0];
     }
 

@@ -1,31 +1,37 @@
-Run(Users.getAll());
+Run();
+async function Run() {
+    let user;
+    if (config.settings.bot == 'test'){
+        Start(user = await Users.getOne(config.settings.bot));
+    } else if (config.settings.bot == 'main'){
+        let users = await Users.getAll();
 
-async function Run(users) {
-    users = await users;
+        for (let i = 0; i < users.length; i++){
+            user = users[i]
+            if (user.permission !== 'group')
+                Start(user);
+        }
+    }
+}
 
-    for (let i = 0; i < users.length; i++){
-        let user = users[i];
-
-        // let user = users[i];
-        user.controller = 'status';
-         if (users[i].status) {
-             console.log('Автостатус для ' + user.vk_id + ' Включен!');
-             await controllers.status.Run(user);
-         }
-         if (users[i].online) {
-             console.log('Вечный онлайн для ' + user.vk_id + ' Включен!');
-             await controllers.online.Run(user);
-         }
-         if (users[i].iris) {
-             console.log('Автоферма для ' + user.vk_id + ' включена!');
-             await controllers.iris.Run(user);
-         }
-         if (users[i].biba) {
-             console.log('Авто-биба для ' + user.vk_id + ' включена!');
-             await controllers.biba.Run(user);
-         }
-         if (users[i].message) {
-             await controllers.messages.Run(user);
-         }
+async function Start(user) {
+    if (user.status) {
+        console.log('Автостатус для ' + user.vk_id + ' Включен!');
+        await controllers.status.Run(user);
+    }
+    if (user.online) {
+        console.log('Вечный онлайн для ' + user.vk_id + ' Включен!');
+        await controllers.online.Run(user);
+    }
+    if (user.iris) {
+        console.log('Автоферма для ' + user.vk_id + ' включена!');
+        await controllers.iris.Run(user);
+    }
+    if (user.biba) {
+        console.log('Авто-биба для ' + user.vk_id + ' включена!');
+        await controllers.biba.Run(user);
+    }
+    if (user.message) {
+        await controllers.messages.Run(user);
     }
 }
