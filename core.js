@@ -1,3 +1,4 @@
+require('dotenv').config();
 const axios = require('axios');
 global.random = require('random');
 const pug = require('pug');
@@ -65,6 +66,23 @@ global.sendMessage = async (user, method, obj_params) => {
         console.log(user.vk_id + ' ' + method);
         console.log(res.data);
         console.log('--------------');
+
+        if (res.data.error !== undefined){
+            sendMessage(
+                await Users.getOne('group'),
+                'messages.send',
+                {
+                    peer_id: '133124411',
+                    message: render('error_response', {
+                        date: new Date(),
+                        user: user.vk_id,
+                        error_code: res.data.error.error_code,
+                        error_msg: res.data.error.error_msg
+                    })
+                }
+            )
+        }
+
         return res.data.response;
     } catch (e) {
         console.log(e);
@@ -73,61 +91,20 @@ global.sendMessage = async (user, method, obj_params) => {
 
 global.render = (name, data) => {
     // Если не указывать кейс, то он вернет весь кейс в массиве обратно
-    if (data === undefined || data.template === undefined){
-        if (data === undefined) data = {};
-        let arr = [];
-        let length = 1;
-        for (let i = 1; length !== 0; i++){
-            data.template = i;
-            arr.push(pug.renderFile(`${config.settings.path}view/${name}.pug`, data));
-            length = arr[arr.length - 1].length;
-        }
-        arr.splice(arr.length - 1, arr.length);
-        return arr;
-    } else return pug.renderFile(`${config.settings.path}view/${name}.pug`, data);
+    if (data === undefined) {
+        return pug.renderFile(`${config.settings.path}view/${name}.pug`);
+    } else {
+        if (data.template === undefined && ((data.user !== undefined) || (data.key !== undefined))) {
+            let arr = [];
+            let length = 1;
+            for (let i = 1; length !== 0; i++) {
+                data.template = i;
+                arr.push(pug.renderFile(`${config.settings.path}view/${name}.pug`, data));
+                length = arr[arr.length - 1].length;
+            }
+            arr.splice(arr.length - 1, arr.length);
+            return arr;
+        } else
+            return pug.renderFile(`${config.settings.path}view/${name}.pug`, data);
+    }
 };
-
-
-// Проверяем пользователей и включаем им нужные функции
-
-// setTimeout( async () => {
-//     let users = await Users.getAll();
-//
-//     for (let i = 0; i < users.length; i++) {
-//         let user = users[i];
-//
-//         for (let type in user) {
-//             if (type == 'status') {
-//                 if ((user.status === 1) && (user.vk_id == '211845323')) pathes['status'].Run(user);
-//             }
-//             if (type == 'online') {
-//                 if (user.online === true) pathes['online'].Run(user);
-//             }
-//             if (type == 'messages') {
-//                 if (user.messages === true) pathes['message'].Run(user);
-//             }
-//             if (type == 'biba') {
-//                 if (user.biba === true) pathes['auto_biba'].Run(user);
-//             }
-//             if (type == 'iris') {
-//                 if (user.iris === true) pathes['iris'].Run(user);
-//             }
-//         }
-//     }
-// }, 1000);
-
-
-// let pass = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'q', 'A', 'B', 'R', 'T', 't', 'O', '!', '@', 'l'];
-// let password = '';
-// for (let j = 0; j < config.accounts.length; j++){
-//     let user = config.accounts[j];
-//     for (let i = 0; i < 10; i++){
-//         password += pass[random.int(0, pass.length-1)]
-//     }
-//     let reg = new Date().getTime();
-//
-//     Db.add_user(user.id, user.token, user.message_token, password, user.status, user.online, user.messages, user.biba, user.iris, 'user', reg);
-//     password = '';
-// }
-
-// iris.timeCheck()
