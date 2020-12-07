@@ -5,7 +5,7 @@ exports.Run = async function (user) {
             return time + 1000 * 60 * (random.int(240, 242));
         },
         (time) => {
-            return time + 1000 * 60 * 60 * random.int(0, 24) * random.int(5, 6);
+            return time + 1000 * 60 * 60 * random.int(5, 15) * random.int(4, 14);
         }
     ];
     let dont_leave = ['133124411', '620995064', '606713425', '447053323', '334456986'];
