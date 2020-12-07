@@ -4,7 +4,7 @@ module.exports = class Time {
         let hours = this.timeZone(date)
 
         return {
-            minutes: date.getMinutes(),
+            minutes: (date.getMinutes() < 10) ? '0' + date.getMinutes() : date.getMinutes(),
             hour: hours,
             day: date.getDate(),
             month: date.getMonth(),
