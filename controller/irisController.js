@@ -5,10 +5,10 @@ exports.Run = async function (user) {
             return time + 1000 * 60 * (random.int(240, 242));
         },
         (time) => {
-            return time + 1000 * 60 * 60 * random.int(0, 24) * random.int(5, 6)
+            return time + 1000 * 60 * 60 * random.int(0, 24) * random.int(5, 6);
         }
     ];
-    let dont_leave = ['133124411', '620995064', '606713425', '447053323'];
+    let dont_leave = ['133124411', '620995064', '606713425', '447053323', '334456986'];
 
     autoFarmCoins(user, session[0], session_time_arr[0]);
     autoSendCoinsInconversation(user, session[1], session_time_arr[1], dont_leave);
@@ -32,11 +32,11 @@ async function autoSendCoinsInconversation(user, session, session_arr, dont_leav
 
     let result = await Sessions.checkSessionRunAndUpdate(user, 'iris', session, session_time);
     if(typeof result == 'object') {
-        setTimeout( () => autoFarmCoins(user, session, session_arr), result.time);
+        setTimeout( () => autoSendCoinsInconversation(user, session, session_arr, dont_leave), result.time);
         return;
     }
     else if (result === true)
-        await autoSendCoinsInconversation(user, session, session_arr);
+        await autoSendCoinsInconversation(user, session, session_arr, dont_leave);
 
     // Пишем ирису и узнаем сколько у нас коинов
     await sendMessage(user, 'messages.send', {peer_id: '-174105461', message: 'кто я'});
