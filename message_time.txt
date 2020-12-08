@@ -1,0 +1,3 @@
+ferma=900,1500;
+good_morning=6;
+good_night=0;
