@@ -4,7 +4,7 @@ module.exports = class Messages {
             return false;
         else {
             let result = (await connect.promise().query(`SELECT * from messages WHERE user_id = ${user_id} AND type = '${type}'`))[0];
-            return (result[0].length >= 1) ? result : result[0]
+            return (result.length >= 1) ? result : result[0]
         }
     };
 
