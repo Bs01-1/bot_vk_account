@@ -8,8 +8,10 @@ async function Run() {
 
         for (let i = 0; i < users.length; i++){
             user = users[i]
-            if (user.permission !== 'group')
-                Start(user);
+
+            if (user.permission != 'test')
+                if (user.permission != 'group')
+                    Start(user);
         }
     }
 }

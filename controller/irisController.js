@@ -29,7 +29,6 @@ async function autoFarmCoins(user, session, session_arr){
 
 async function autoSendCoinsInconversation(user, session, session_arr, dont_leave) {
     let session_time = await session_arr(new Date().getTime());
-    console.log(new Date(session_time).getHours())
 
     let result = await Sessions.checkSessionRunAndUpdate(user, 'iris', session, session_time);
     if(typeof result == 'object') {
