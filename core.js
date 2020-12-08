@@ -2,15 +2,16 @@ require('dotenv').config();
 const axios = require('axios');
 global.random = require('random');
 const pug = require('pug');
-const fs = require('fs');
+global.fs = require('fs');
 
 global.config = require ('./config.js');
 global.Users = require ('./models/Users');
 global.Status = require ('./models/Status');
 global.Time = require ('./models/Time');
 global.Sessions = require ('./models/Sessions');
-global.controllers = {};
+global.Messages = require ('./models/Messages');
 
+global.controllers = {};
 let path = config.settings.path + 'controller';
 fs.readdir(path, function (err, items) {
     for (let i = 0; i < items.length; i++) {
@@ -21,22 +22,6 @@ fs.readdir(path, function (err, items) {
 });
 
 console.log('Запустился!');
-
-global.pre_send = (message_config, user) => {
-    let message;
-    if (message_config.key === undefined){
-        message = (typeof message_config.message == 'string') ? message_config.message : message_config.message
-            [random.int(0, message_config.message.length - 1)];
-    } else {
-        let message_arr = render('auto-messages', {
-            key: message_config.key
-        });
-        message = message_arr[random.int(0, message_arr.length - 1)];
-    }
-    sendMessage(user, 'messages.send', {
-        peer_id: message_config.peer_id, message: message
-    })
-}
 
 // Отправка сообщение Вк
 global.sendMessage = async (user, method, obj_params) => {
