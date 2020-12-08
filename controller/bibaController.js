@@ -45,8 +45,7 @@ async function autoBignonAndFap(user, session, session_arr, configs) {
     if(typeof result == 'object') {
         setTimeout( () => autoBignonAndFap(user, session, session_arr, configs), result.time);
         return;
-    }
-    else if (result === true)
+    } else if (result === true)
         await autoBignonAndFap(user, session, session_arr, configs);
 
     configs.message = 'бигбон';

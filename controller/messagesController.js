@@ -55,8 +55,7 @@ async function sendAtThisHourMessage(message_config, user) {
     if (get_time === false)
         return;
 
-    // let time = new Date().getTime() + (1000 * 60 * (60 - new Date().getMinutes()));
-    let time = new Date().getTime() + (1000 * 10);
+    let time = new Date().getTime() + (1000 * 60 * (60 - new Date().getMinutes()));
 
     let result = await Sessions.checkSessionRunAndUpdate(user, 'message', message_config.session, time);
     if(typeof result == 'object') {

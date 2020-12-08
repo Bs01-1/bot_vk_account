@@ -3,7 +3,8 @@ async function Run() {
     let user;
     if (config.settings.bot == 'test'){
         Start(user = await Users.getOne(config.settings.bot));
-    } else if (config.settings.bot == 'main'){
+    }
+    else if (config.settings.bot == 'main'){
         let users = await Users.getAll();
 
         for (let i = 0; i < users.length; i++){
