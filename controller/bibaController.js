@@ -35,7 +35,7 @@ async function autoBibon(user, session, session_arr, configs) {
     }
 
     configs.message = 'бибон';
-    pre_send(configs, user);
+    sendMessage(user, 'messages.send', configs);
 }
 
 async function autoBignonAndFap(user, session, session_arr, configs) {
@@ -50,7 +50,7 @@ async function autoBignonAndFap(user, session, session_arr, configs) {
         await autoBignonAndFap(user, session, session_arr, configs);
 
     configs.message = 'бигбон';
-    pre_send(configs, user);
+    sendMessage(user, 'messages.send', configs);
     configs.message = 'фап';
-    pre_send(configs, user);
+    sendMessage(user, 'messages.send', configs);
 }
