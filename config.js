@@ -12,4 +12,3 @@ module.exports.settings = {
     iris_conversation_link: process.env.IRIS_CONVERSATION_LINK,
     bot: process.env.BOT
 };
-// 2000000008
