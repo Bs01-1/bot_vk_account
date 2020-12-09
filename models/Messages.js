@@ -25,4 +25,4 @@ module.exports = class Messages {
             random.int(Number(fileContent.split(',')[0]), Number(fileContent.split(',')[1])) :
             Number(fileContent);
     }
-}
+};
