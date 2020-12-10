@@ -1,42 +1,36 @@
 exports.Run = async function (user) {
     let session = ['iris-farm', 'iris-conversation'];
-    let session_time_arr = [
-        (time) => {
-            return time + 1000 * 60 * (random.int(240, 242));
-        },
-        (time) => {
-            return time + 1000 * 60 * 60 * random.int(5, 15) * random.int(4, 14);
-        }
-    ];
     let dont_leave = ['133124411', '620995064', '606713425', '447053323', '334456986'];
 
-    autoFarmCoins(user, session[0], session_time_arr[0]);
-    autoSendCoinsInconversation(user, session[1], session_time_arr[1], dont_leave);
+    autoFarmCoins(user, session[0]);
+    autoSendCoinsInconversation(user, session[1], dont_leave);
 
 };
 
-async function autoFarmCoins(user, session, session_arr){
-    let session_time = await session_arr(new Date().getTime());
+async function autoFarmCoins(user, session){
+    let session_time = (time) => {
+        return time + 1000 * 60 * (random.int(240, 242));
+    };
 
-    let result = await Sessions.checkSessionRunAndUpdate(user, 'iris', session, session_time);
+    let result = await Sessions.checkSessionRunAndUpdate(user, 'iris', session, session_time(new Date().getTime()));
     if(result === true) {
         sendMessage(user, 'wall.createComment', {owner_id: '-174105461', post_id: '35135', message: 'Ферма'});
-        await autoFarmCoins(user, session, session_arr);
+        await autoFarmCoins(user, session);
     }
     else
-        setTimeout( () => autoFarmCoins(user, session, session_arr), result.time);
+        setTimeout( () => autoFarmCoins(user, session), result.time);
 }
 
-async function autoSendCoinsInconversation(user, session, session_arr, dont_leave) {
-    let session_time = await session_arr(new Date().getTime());
+async function autoSendCoinsInconversation(user, session, dont_leave) {
+    let session_time = await Time.getRandomDayAndCheckNightTime(5, 7);
 
     let result = await Sessions.checkSessionRunAndUpdate(user, 'iris', session, session_time);
     if(typeof result == 'object') {
-        setTimeout( () => autoSendCoinsInconversation(user, session, session_arr, dont_leave), result.time);
+        setTimeout( () => autoSendCoinsInconversation(user, session, dont_leave), result.time);
         return;
     }
     else if (result === true)
-        await autoSendCoinsInconversation(user, session, session_arr, dont_leave);
+        await autoSendCoinsInconversation(user, session, dont_leave);
 
     // Пишем ирису и узнаем сколько у нас коинов
     await sendMessage(user, 'messages.send', {peer_id: '-174105461', message: 'кто я'});
