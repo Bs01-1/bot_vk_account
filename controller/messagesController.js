@@ -34,7 +34,8 @@ async function intervalMessage(message_config, user) {
 
     let time = new Date().getTime() + (1000 * get_time) * 60;
 
-    let result = await Sessions.checkSessionRunAndUpdate(user, 'message', message_config.session, time);
+    let result = await Sessions.checkSessionRunAndUpdate(user, 'message',
+        message_config.session + '-' + message_config.db_session.m_key, time);
     if(typeof result == 'object') {
         setTimeout( () => intervalMessage(message_config, user), result.time);
         return;
@@ -57,7 +58,8 @@ async function sendAtThisHourMessage(message_config, user) {
 
     let time = new Date().getTime() + (1000 * 60 * (60 - new Date().getMinutes()));
 
-    let result = await Sessions.checkSessionRunAndUpdate(user, 'message', message_config.session, time);
+    let result = await Sessions.checkSessionRunAndUpdate(user, 'message',
+        message_config.session + '-' + message_config.db_session.m_key, time);
     if(typeof result == 'object') {
         setTimeout( () => sendAtThisHourMessage(message_config, user), result.time);
         return;
