@@ -15,8 +15,16 @@ connect.connect( err => {
 });
 
 module.exports = class Users {
-    static async getAll (){
-        let result = await connect.promise().query('SELECT * from users');
+    static async getAll (obj){
+        let request =  'SELECT * from users';
+        if (obj !== undefined) {
+            request = ((obj.controller !== undefined) || (obj.permission !== undefined)) ? request += ' WHERE ' : request;
+            request = ((obj.controller !== undefined) && (obj.permission !== undefined)) ? request += ` ${obj.controller} = 1 
+                AND permission = '${obj.permission}'` : (obj.controller !== undefined) ? request += ` ${obj.controller} = 1` :
+                ` permission = '${obj.permission}'`;
+        }
+
+        let result = await connect.promise().query(request);
         return result[0];
     }
 

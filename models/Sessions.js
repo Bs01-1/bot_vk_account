@@ -30,9 +30,11 @@ module.exports = class Sessions {
 
     static async checkSessionRunAndUpdate (user, contoller, session_name, session_time) {
         if (!await this.checkExist(user.id, session_name))
-            if ((await Users.getOne(user.id))[contoller]){
+            if (user.id !== 1) {
+                if ((await Users.getOne(user.id))[contoller])
+                    await this.add(user.id, session_name, new Date().getTime());
+            } else
                 await this.add(user.id, session_name, new Date().getTime());
-            }
 
         if (await this.checkTimeExit(user.id, session_name)) {
             this.updateSession(user.id, session_name, session_time);

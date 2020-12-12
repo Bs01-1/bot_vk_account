@@ -45,7 +45,7 @@ async function intervalMessage(message_config, user) {
 
     let message_arr = render('auto-messages', {
         key: message_config.db_session.m_key
-    });
+    }, true);
 
     sendMessage(user, 'messages.send', {peer_id: message_config.db_session.peer_id, message: message_arr[random.int(0, message_arr.length - 1)]});
 
@@ -73,8 +73,8 @@ async function sendAtThisHourMessage(message_config, user) {
     }
 
     let message_arr = render('auto-messages', {
-        key: message_config.db_session.m_key
-    });
+        key: message_config.db_session.m_key,
+    }, true);
 
     sendMessage(user, 'messages.send', {peer_id: message_config.db_session.peer_id, message: message_arr[random.int(0, message_arr.length - 1)]});
 }

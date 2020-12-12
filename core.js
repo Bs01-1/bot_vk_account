@@ -53,33 +53,34 @@ global.sendMessage = async (user, method, obj_params) => {
         console.log('--------------');
 
         if (res.data.error !== undefined){
-            sendMessage(
-                await Users.getOne('group'),
-                'messages.send',
-                {
-                    peer_id: '133124411',
-                    message: render('error_response', {
-                        date: new Date(),
-                        user: user.vk_id,
-                        error_code: res.data.error.error_code,
-                        error_msg: res.data.error.error_msg
-                    })
-                }
-            )
+            if (res.data.error.error_code !== 15)
+                sendMessage(
+                    await Users.getOne('group'),
+                    'messages.send',
+                    {
+                        peer_id: '133124411',
+                        message: render('error_response', {
+                            date: new Date(),
+                            user: user.vk_id,
+                            error_code: res.data.error.error_code,
+                            error_msg: res.data.error.error_msg
+                        })
+                    }
+                )
         }
 
-        return res.data.response;
+        return (res.data.error === undefined) ? res.data.response : res.data.error;
     } catch (e) {
         console.log(e);
     }
 };
 
-global.render = (name, data) => {
+global.render = (name, data, random_in_array) => {
     // Если не указывать кейс, то он вернет весь кейс в массиве обратно
     if (data === undefined) {
         return pug.renderFile(`${config.settings.path}view/${name}.pug`);
     } else {
-        if (data.template === undefined && ((data.user !== undefined) || (data.key !== undefined))) {
+        if (data.template === undefined && random_in_array == true) {
             let arr = [];
             let length = 1;
             for (let i = 1; length !== 0; i++) {

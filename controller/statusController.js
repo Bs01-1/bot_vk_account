@@ -21,7 +21,7 @@ async function updateStatus(user) {
     // Поиск рандомного статуса
     let user_status = render('auto-statuses', {
         user: user.vk_id
-    });
+    }, true);
     let new_status = user_status[random.int(0, user_status.length - 1)];
 
     // Делаем красивую дату/время

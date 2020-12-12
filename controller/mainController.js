@@ -1,6 +1,7 @@
 Run();
 async function Run() {
     let user;
+
     if (config.settings.bot == 'test'){
         Start(user = await Users.getOne(config.settings.bot));
     }
@@ -15,6 +16,8 @@ async function Run() {
                     Start(user);
         }
     }
+
+    await controllers.iris.RunAutoSendCoinsInconversation(await Users.getAll({controller: 'iris', permission: 'bot'}));
 }
 
 async function Start(user) {
