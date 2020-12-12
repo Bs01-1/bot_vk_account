@@ -1,6 +1,5 @@
 exports.Run = async function (user) {
     let session = ['iris-farm', 'iris-conversation'];
-    // let dont_leave = ['133124411', '620995064', '606713425', '447053323', '334456986'];
 
     autoFarmCoins(user, session[0]);
 };
@@ -12,11 +11,14 @@ async function autoFarmCoins(user, session){
 
     let result = await Sessions.checkSessionRunAndUpdate(user, 'iris', session, session_time(new Date().getTime()));
     if(result === true) {
-        sendMessage(user, 'wall.createComment', {owner_id: '-174105461', post_id: '35135', message: 'Ферма'});
+        let res = await sendMessage(user, 'wall.createComment', {owner_id: '-174105461', post_id: '35135', message: 'Ферма'});
+        console.log(res.comment_id)
+        setTimeout( () => sendMessage(user, 'wall.deleteComment', {owner_id: '-174105461', comment_id: res.comment_id}), 5000);
         await autoFarmCoins(user, session);
     }
     else
         setTimeout( () => autoFarmCoins(user, session), result.time);
+
 }
 
 exports.RunAutoSendCoinsInconversation = async function (users) {
