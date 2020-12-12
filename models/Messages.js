@@ -1,6 +1,15 @@
+/**
+ * Класс для управления конфигами сообщений
+ */
 module.exports = class Messages {
-    static async get (user_id, type){
-        if(!await this.exist(user_id, type))
+    /**
+     * Получаем конфиги сообщения пользователя
+     * @param {int} user_id - user.id
+     * @param {string} type - тип отправки сообщения
+     * @returns {Promise<false|{id: int, user_id: int, m_key: string, type: string}>} - false или message object
+     */
+    static async getMessageConfig (user_id, type){
+        if(!await this.checkMessageConfigExist(user_id, type))
             return false;
         else {
             let result = (await connect.promise().query(`SELECT * from messages WHERE user_id = ${user_id} AND type = '${type}'`))[0];
@@ -8,12 +17,23 @@ module.exports = class Messages {
         }
     };
 
-    static async exist (user_id, type) {
+    /**
+     * Проверяем существует ли конфиги сообщения пользователя
+     * @param {int} user_id - user id
+     * @param {string} type - тип отправки сообщения
+     * @returns {Promise<boolean>}
+     */
+    static async checkMessageConfigExist (user_id, type) {
         let result = await connect.promise().query(`SELECT * from messages WHERE user_id = ${user_id} AND type = '${type}'`);
         return (result[0].length >= 1) ? true : false;
     }
 
-    static async getTime (key) {
+    /**
+     * Получаем время для сообщения по ключу
+     * @param {string} key - m_key
+     * @returns {Promise<false|int>}
+     */
+    static async getMessageConfigTime (key) {
         let fileContent = await fs.readFileSync(config.settings.path + 'message_time.txt', "utf8");
         if(!fileContent.includes(key))
             return false;

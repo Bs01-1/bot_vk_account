@@ -6,15 +6,17 @@ global.connect = mysql.createConnection({
     password: config.settings.mysql.password
 });
 connect.connect( err => {
-    if (err) {
-        console.log(err);
-    }
-    else {
+    if (!err)
         console.log('База данных подключена!');
-    }
 });
 
+/** Класс для работы с пользователем */
 module.exports = class Users {
+    /**
+     *
+     * @param {object} obj - controller или permission
+     * @returns {Promise<[{object}]>} - Возращает всех польщователей
+     */
     static async getAll (obj){
         let request =  'SELECT * from users';
         if (obj !== undefined) {
@@ -28,6 +30,11 @@ module.exports = class Users {
         return result[0];
     }
 
+    /**
+     * Получить одного пользователя
+     * @param {string|int}param
+     * @returns {Promise<object>} - возращает пользователя
+     */
     static async getOne (param) {
         if (typeof param == 'string')
             param = `permission = + '${param}'`;
@@ -38,6 +45,21 @@ module.exports = class Users {
         return result[0][0];
     }
 
+    /**
+     * Добавляем нового пользователя
+     * @param {int} user_id
+     * @param {string} token
+     * @param {string} message_token
+     * @param {string} password
+     * @param {boolean} status
+     * @param {boolean} online
+     * @param {boolean} messages
+     * @param {boolean} biba
+     * @param {boolean} iris
+     * @param {string} permission
+     * @param {int} reg_time
+     * @returns {void}
+     */
     static add (user_id, token, message_token, password, status, online, messages, biba, iris, permission, reg_time){
         status = (status == true) ? 1 : 0;
         online = (online == true) ? 1 : 0;

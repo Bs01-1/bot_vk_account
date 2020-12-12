@@ -26,10 +26,10 @@ async function autoBibon(user, session, session_arr, configs) {
         let session_count = (await Sessions.getOne(user.id, session)).count += 1;
 
         if (session_count >= 27) {
-            await Sessions.updateSession(user.id, session, new Date().getTime() + 1000 * 60 * 100, 1);
+            await Sessions.updateOneSession(user.id, session, new Date().getTime() + 1000 * 60 * 100, 1);
             console.log("Ждем")
         } else
-            await Sessions.updateSession(user.id, session, session_time, session_count);
+            await Sessions.updateOneSession(user.id, session, session_time, session_count);
 
         await autoBibon(user, session, session_arr, configs);
     }

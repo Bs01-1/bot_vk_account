@@ -1,12 +1,12 @@
 exports.Run = async function (user) {
     if (!await Sessions.checkExist(user.id, 'auto-status'))
         if ((await Users.getOne(user.id)).status){
-            await Sessions.add(user.id, 'auto-status', new Date().getTime());
+            await Sessions.addOneSession(user.id, 'auto-status', new Date().getTime());
         }
 
     if (await Sessions.checkTimeExit(user.id, 'auto-status')) {
         sendMessage(user, 'status.set', await updateStatus(user));
-        Sessions.updateSession(user.id, 'auto-status',new Date().getTime() + (1000 * random.int(60, 70)));
+        Sessions.updateOneSession(user.id, 'auto-status',new Date().getTime() + (1000 * random.int(60, 70)));
         controllers.status.Run(user);
     }
     else {
@@ -16,7 +16,7 @@ exports.Run = async function (user) {
 };
 
 async function updateStatus(user) {
-    let status_info = await Status.get(user);
+    let status_info = await Status.getOne(user.id);
 
     // Поиск рандомного статуса
     let user_status = render('auto-statuses', {
@@ -27,7 +27,7 @@ async function updateStatus(user) {
     // Делаем красивую дату/время
     let status_date;
     if (status_info.type_time !== 9) {
-        let time = Time.get();
+        let time = Time.getObjectTime();
         if (status_info.type_time == 8) status_info.type_time = random.int(1, 7);
         if (status_info.type_time == 1) status_date = time.hour + 'H ' + time.minutes + ' M';
         if (status_info.type_time == 2) status_date = 'Время - ' + time.hour + ':' + time.minutes;

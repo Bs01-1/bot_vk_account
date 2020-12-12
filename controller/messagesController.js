@@ -2,7 +2,7 @@ exports.Run = async function (user) {
     let session = ['message-interval', 'message-sendAtThisHours'];
     let session_check = []
     for (let i = 0; i < session.length; i++){
-        let db_session = await Messages.get(user.id, session[i]);
+        let db_session = await Messages.getMessageConfig(user.id, session[i]);
         if (db_session)
             session_check[i] = db_session;
     }
@@ -28,7 +28,7 @@ exports.Run = async function (user) {
 };
 
 async function intervalMessage(message_config, user) {
-    let get_time = await Messages.getTime(message_config.db_session.m_key);
+    let get_time = await Messages.getMessageConfigTime(message_config.db_session.m_key);
     if (get_time === false)
         return;
 
@@ -52,7 +52,7 @@ async function intervalMessage(message_config, user) {
 }
 
 async function sendAtThisHourMessage(message_config, user) {
-    let get_time = await Messages.getTime(message_config.db_session.m_key);
+    let get_time = await Messages.getMessageConfigTime(message_config.db_session.m_key);
     if (get_time === false)
         return;
 
@@ -65,7 +65,7 @@ async function sendAtThisHourMessage(message_config, user) {
         return;
     }
     else if (result === true) {
-        if (get_time != Time.get().hour) {
+        if (get_time != Time.getObjectTime().hour) {
             await sendAtThisHourMessage(message_config, user);
             return;
         }

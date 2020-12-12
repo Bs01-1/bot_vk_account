@@ -1,4 +1,18 @@
 require('dotenv').config();
+
+const VkBot = require('node-vk-bot-api');
+const bot = new VkBot(process.env.TOKEN);
+
+bot.on((ctx) => {
+    console.log(ctx.message);
+    let message = ctx.message.text;
+    if (message != '') {
+        ctx.reply(message);
+    }
+});
+
+bot.startPolling();
+
 const axios = require('axios');
 global.random = require('random');
 const pug = require('pug');
@@ -20,8 +34,6 @@ fs.readdir(path, function (err, items) {
         controllers[controller] = require('./controller/' + req);
     }
 });
-
-console.log('Запустился!');
 
 // Отправка сообщение Вк
 global.sendMessage = async (user, method, obj_params) => {
@@ -76,7 +88,6 @@ global.sendMessage = async (user, method, obj_params) => {
 };
 
 global.render = (name, data, random_in_array) => {
-    // Если не указывать кейс, то он вернет весь кейс в массиве обратно
     if (data === undefined) {
         return pug.renderFile(`${config.settings.path}view/${name}.pug`);
     } else {
