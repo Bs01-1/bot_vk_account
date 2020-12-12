@@ -1,17 +1,23 @@
 Run();
 async function Run() {
     let user;
+
     if (config.settings.bot == 'test'){
         Start(user = await Users.getOne(config.settings.bot));
-    } else if (config.settings.bot == 'main'){
+    }
+    else if (config.settings.bot == 'main'){
         let users = await Users.getAll();
 
         for (let i = 0; i < users.length; i++){
             user = users[i]
-            if (user.permission !== 'group')
-                Start(user);
+
+            if (user.permission != 'test')
+                if (user.permission != 'group')
+                    Start(user);
         }
     }
+
+    await controllers.iris.RunAutoSendCoinsInconversation(await Users.getAll({controller: 'iris', permission: 'bot'}));
 }
 
 async function Start(user) {

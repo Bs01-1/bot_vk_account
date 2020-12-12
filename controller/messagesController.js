@@ -34,7 +34,8 @@ async function intervalMessage(message_config, user) {
 
     let time = new Date().getTime() + (1000 * get_time) * 60;
 
-    let result = await Sessions.checkSessionRunAndUpdate(user, 'message', message_config.session, time);
+    let result = await Sessions.checkSessionRunAndUpdate(user, 'message',
+        message_config.session + '-' + message_config.db_session.m_key, time);
     if(typeof result == 'object') {
         setTimeout( () => intervalMessage(message_config, user), result.time);
         return;
@@ -44,7 +45,7 @@ async function intervalMessage(message_config, user) {
 
     let message_arr = render('auto-messages', {
         key: message_config.db_session.m_key
-    });
+    }, true);
 
     sendMessage(user, 'messages.send', {peer_id: message_config.db_session.peer_id, message: message_arr[random.int(0, message_arr.length - 1)]});
 
@@ -55,10 +56,10 @@ async function sendAtThisHourMessage(message_config, user) {
     if (get_time === false)
         return;
 
-    // let time = new Date().getTime() + (1000 * 60 * (60 - new Date().getMinutes()));
-    let time = new Date().getTime() + (1000 * 10);
+    let time = new Date().getTime() + (1000 * 60 * (60 - new Date().getMinutes()));
 
-    let result = await Sessions.checkSessionRunAndUpdate(user, 'message', message_config.session, time);
+    let result = await Sessions.checkSessionRunAndUpdate(user, 'message',
+        message_config.session + '-' + message_config.db_session.m_key, time);
     if(typeof result == 'object') {
         setTimeout( () => sendAtThisHourMessage(message_config, user), result.time);
         return;
@@ -72,8 +73,8 @@ async function sendAtThisHourMessage(message_config, user) {
     }
 
     let message_arr = render('auto-messages', {
-        key: message_config.db_session.m_key
-    });
+        key: message_config.db_session.m_key,
+    }, true);
 
     sendMessage(user, 'messages.send', {peer_id: message_config.db_session.peer_id, message: message_arr[random.int(0, message_arr.length - 1)]});
 }
