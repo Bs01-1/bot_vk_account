@@ -1,12 +1,12 @@
 exports.Run = async (user) => {
     if (!await Sessions.checkExist(user.id, 'online'))
         if ((await Users.getOne(user.id)).online){
-            await Sessions.add(user.id, 'online', new Date().getTime());
+            await Sessions.addOneSession(user.id, 'online', new Date().getTime());
         }
 
     if (await Sessions.checkTimeExit(user.id, 'online')) {
         sendMessage(user ,'account.setOnline')
-        Sessions.updateSession(user.id, 'online', new Date().getTime() + (1000 * random.int(300, 305)));
+        Sessions.updateOneSession(user.id, 'online', new Date().getTime() + (1000 * random.int(300, 305)));
         controllers.online.Run(user);
     }
     else {
